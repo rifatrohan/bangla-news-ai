@@ -45,6 +45,18 @@ def fetch_feed(feed):
 
     return items
 
+def list_gemini_models(api_key):
+    url = "https://generativelanguage.googleapis.com/v1beta/models"
+    req = urllib.request.Request(
+        url,
+        headers={"x-goog-api-key": api_key}
+    )
+    with urllib.request.urlopen(req, timeout=30) as response:
+        data = json.loads(response.read())
+    for model in data.get("models", []):
+        if "generateContent" in model.get("supportedGenerationMethods", []):
+            print("Available Gemini model:", model["name"])
+
 def make_ai_draft(item, api_key):
     prompt = f"""
 তুমি Bangla News AI-এর বাংলা সংবাদ-সম্পাদক।
@@ -92,6 +104,10 @@ def make_ai_draft(item, api_key):
 
 def main():
     api_key = os.environ.get("GEMINI_API_KEY")
+    
+    if api_key:
+    list_gemini_models(api_key)
+
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY secret পাওয়া যায়নি")
 
