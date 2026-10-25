@@ -122,8 +122,14 @@ def main():
                 "approval_status": "pending"
             })
             print("Draft created for:", item["title"])
-        except Exception as error:
-            print("AI draft failed:", item["title"], str(error))
+        
+except Exception as error:
+    if isinstance(error, urllib.error.HTTPError):
+        details = error.read().decode("utf-8", errors="replace")
+        print("AI draft failed:", item["title"], error.code, details)
+    else:
+        print("AI draft failed:", item["title"], repr(error))
+
 
     with open("news.json", "w", encoding="utf-8") as file:
         json.dump({
