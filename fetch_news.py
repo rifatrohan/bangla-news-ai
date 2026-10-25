@@ -77,8 +77,7 @@ def make_ai_draft(item, api_key):
 
     url = (
         "https://generativelanguage.googleapis.com/v1beta/"
-        "models/gemini-3.8-flash:generateContent?"
-        + urllib.parse.urlencode({"key": api_key})
+        "models/gemini-3.8-flash:generateContent"
     )
 
     payload = {
@@ -94,14 +93,34 @@ def make_ai_draft(item, api_key):
     req = urllib.request.Request(
         url,
         data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
+        headers={
+            "Content-Type": "application/json",
+            "x-goog-api-key": api_key
+        },
         method="POST"
     )
 
-    with urllib.request.urlopen(req, timeout=60) as response:
-        result = json.loads(response.read())
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=120) as response:
+                result = json.loads(response.read())
 
-    return result["candidates"][0]["content"]["parts"][0]["text"].strip()
+            return result["candidates"][0]["content"]["parts"][0]["text"].strip()
+
+        except (urllib.error.HTTPError, TimeoutError, urllib.error.URLError) as error:
+            retryable = isinstance(error, (TimeoutError, urllib.error.URLError))
+
+            if isinstance(error, urllib.error.HTTPError):
+                details = error.read().decode("utf-8", errors="replace")
+                print("Gemini API error:", error.code, details)
+                retryable = error.code in (429, 500, 502, 503, 504)
+
+            if not retryable or attempt == 2:
+                raise
+
+            print(f"Gemini সাময়িকভাবে ব্যস্ত; {attempt + 1} নম্বর retry হচ্ছে।")
+            time.sleep(2 ** (attempt + 1))
+
 
 def main():
     api_key = os.environ.get("GEMINI_API_KEY")
