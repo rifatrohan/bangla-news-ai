@@ -24,7 +24,7 @@ def fetch_feed(feed):
         headers={"User-Agent": "BanglaNewsAI/1.0"}
     )
 
-    with urllib.request.urlopen(req, timeout=20) as response:
+    with urllib.request.urlopen(req, timeout=120) as response:
         root = ET.fromstring(response.read())
 
     items = []
