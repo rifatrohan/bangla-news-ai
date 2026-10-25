@@ -106,7 +106,7 @@ def main():
     api_key = os.environ.get("GEMINI_API_KEY")
     
     if api_key:
-    list_gemini_models(api_key)
+        list_gemini_models(api_key)
 
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY secret পাওয়া যায়নি")
