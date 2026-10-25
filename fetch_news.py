@@ -1,6 +1,9 @@
 
 import json
+import os
 import urllib.request
+import urllib.parse
+import urllib.error
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
@@ -16,34 +19,82 @@ FEEDS = [
 ]
 
 def fetch_feed(feed):
-    request = urllib.request.Request(
+    req = urllib.request.Request(
         feed["url"],
         headers={"User-Agent": "BanglaNewsAI/1.0"}
     )
 
-    with urllib.request.urlopen(request, timeout=20) as response:
+    with urllib.request.urlopen(req, timeout=20) as response:
         root = ET.fromstring(response.read())
 
     items = []
-
     for item in root.findall(".//item"):
         title = item.findtext("title", default="").strip()
         link = item.findtext("link", default="").strip()
-        description = item.findtext("description", default="").strip()
-        pub_date = item.findtext("pubDate", default="").strip()
+        desc = item.findtext("description", default="").strip()
+        published = item.findtext("pubDate", default="").strip()
 
         if title and link:
             items.append({
                 "source": feed["name"],
                 "title": title,
                 "link": link,
-                "description": description,
-                "published": pub_date
+                "description": desc[:1200],
+                "published": published
             })
 
     return items
 
+def make_ai_draft(item, api_key):
+    prompt = f"""
+তুমি Bangla News AI-এর বাংলা সংবাদ-সম্পাদক।
+
+নিচের তথ্যের ভিত্তিতে একটি সংক্ষিপ্ত বাংলা সংবাদ-খসড়া তৈরি করো।
+তথ্যে নেই এমন ঘটনা, সংখ্যা, উদ্ধৃতি বা দাবি যোগ করবে না।
+তথ্য অসম্পূর্ণ হলে তা স্পষ্ট রাখবে।
+মূল সংবাদমাধ্যমের লেখা হুবহু কপি করবে না।
+খসড়াটি প্রকাশের আগে মানুষের যাচাই প্রয়োজন।
+
+উৎস: {item['source']}
+শিরোনাম: {item['title']}
+সংক্ষিপ্ত বিবরণ: {item['description']}
+
+শুধু বাংলায় ২-৪ বাক্যের একটি সারাংশ লেখো।
+"""
+
+    url = (
+        "https://generativelanguage.googleapis.com/v1beta/"
+        "models/gemini-2.5-flash:generateContent?"
+        + urllib.parse.urlencode({"key": api_key})
+    )
+
+    payload = {
+        "contents": [{
+            "parts": [{"text": prompt}]
+        }],
+        "generationConfig": {
+            "temperature": 0.2,
+            "maxOutputTokens": 300
+        }
+    }
+
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST"
+    )
+
+    with urllib.request.urlopen(req, timeout=60) as response:
+        result = json.loads(response.read())
+
+    return result["candidates"][0]["content"]["parts"][0]["text"].strip()
+
 def main():
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY secret পাওয়া যায়নি")
+
     news = []
     errors = []
 
@@ -55,22 +106,42 @@ def main():
             errors.append(feed["name"])
             print("Feed unavailable:", feed["name"], str(error))
 
-    # Remove duplicate links
     unique = {}
     for item in news:
         unique[item["link"]] = item
 
-    result = {
-        "fetched_at": datetime.now(timezone.utc).isoformat(),
-        "count": len(unique),
-        "news": list(unique.values())[:50],
-        "feed_errors": errors
-    }
+    articles = list(unique.values())[:5]
+    drafts = []
+
+    for item in articles:
+        try:
+            summary = make_ai_draft(item, api_key)
+            drafts.append({
+                **item,
+                "ai_summary": summary,
+                "approval_status": "pending"
+            })
+            print("Draft created for:", item["title"])
+        except Exception as error:
+            print("AI draft failed:", item["title"], str(error))
 
     with open("news.json", "w", encoding="utf-8") as file:
-        json.dump(result, file, ensure_ascii=False, indent=2)
+        json.dump({
+            "fetched_at": datetime.now(timezone.utc).isoformat(),
+            "count": len(unique),
+            "news": list(unique.values())[:50],
+            "feed_errors": errors
+        }, file, ensure_ascii=False, indent=2)
 
-    print("Total unique news:", result["count"])
+    with open("drafts.json", "w", encoding="utf-8") as file:
+        json.dump({
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "count": len(drafts),
+            "drafts": drafts
+        }, file, ensure_ascii=False, indent=2)
+
+    print("News collected:", len(unique))
+    print("AI drafts created:", len(drafts))
 
 if __name__ == "__main__":
     main()
