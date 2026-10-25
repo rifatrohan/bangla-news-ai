@@ -64,7 +64,7 @@ def make_ai_draft(item, api_key):
 
     url = (
         "https://generativelanguage.googleapis.com/v1beta/"
-        "models/gemini-2.5-flash:generateContent?"
+        "models/gemini-2.5-flash-latest:generateContent?"
         + urllib.parse.urlencode({"key": api_key})
     )
 
