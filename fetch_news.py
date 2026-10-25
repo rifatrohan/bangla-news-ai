@@ -113,6 +113,7 @@ def main():
     articles = list(unique.values())[:5]
     drafts = []
 
+    
     for item in articles:
         try:
             summary = make_ai_draft(item, api_key)
@@ -122,13 +123,14 @@ def main():
                 "approval_status": "pending"
             })
             print("Draft created for:", item["title"])
-        
-except Exception as error:
-    if isinstance(error, urllib.error.HTTPError):
-        details = error.read().decode("utf-8", errors="replace")
-        print("AI draft failed:", item["title"], error.code, details)
-    else:
-        print("AI draft failed:", item["title"], repr(error))
+
+        except Exception as error:
+            if isinstance(error, urllib.error.HTTPError):
+                details = error.read().decode("utf-8", errors="replace")
+                print("AI draft failed:", item["title"], error.code, details)
+            else:
+                print("AI draft failed:", item["title"], repr(error))
+
 
 
     with open("news.json", "w", encoding="utf-8") as file:
