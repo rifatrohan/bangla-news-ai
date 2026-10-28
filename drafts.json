@@ -1,5 +1,24 @@
 {
-  "created_at": "2026-10-28T03:09:19.172116+00:00",
-  "count": 0,
-  "drafts": []
+  "created_at": "2026-10-28T12:05:27.862168+00:00",
+  "count": 2,
+  "drafts": [
+    {
+      "source": "BBC Bangla",
+      "title": "ঘূর্ণিঝড় 'অর্ণবের' প্রভাবে অন্ধ্র ও ওড়িশায় জনজীবন বিপর্যস্ত",
+      "link": "https://www.bbc.com/bengali/articles/cwg7x3gjkezgo?at_medium=RSS&at_campaign=rss",
+      "description": "তীব্র ঘূর্ণিঝড় অর্ণব বুধবার ভোরে পুদুচেরির কাকিনাডা ও ইয়ানামের মধ্যবর্তী অন্ধ্রপ্রদেশ উপকূলে আছড়ে পড়ায় উপকূলীয় এলাকাজুড়ে ভারী বৃষ্টিপাত শুরু হয়েছে, প্রবল বেগে ঝোড়ো বাতাস বইছে যার জেরে ব্যাহত হয়েছে দৈনন্দিন জীবন।",
+      "published": "Wed, 28 Oct 2026 09:49:17 GMT",
+      "ai_summary": ").\n    *   Hit early Wednesday.",
+      "approval_status": "pending"
+    },
+    {
+      "source": "BBC Bangla",
+      "title": "জ্বালানির দামের কারণে যাত্রী নিয়ে মাঝ সাগরে আটকা বিলাসবহুল জাহাজ",
+      "link": "https://www.bbc.com/bengali/articles/c9n738r6e7ddo?at_medium=RSS&at_campaign=rss",
+      "description": "টানা ৭৫০ দিন সাগরে চলার পর জ্বালানির আকাশছোঁয়া দামের কারণে 'ভিলা ভি ওডিসি' তার যাত্রা স্থগিত করেছে। জাহাজের পরিচালনাকারী সংস্থা বলছে, এশিয়ার কিছু অংশে প্রতি কেবিনের মাসিক জ্বালানি খরচ ১৮০০ ডলার থেকে বেড়ে ৮০০০ ডলার পর্যন্ত হয়েছে।",
+      "published": "Wed, 28 Oct 2026 10:31:36 GMT",
+      "ai_summary": "একটি সারাংশ লেখো).\n\n2.  **",
+      "approval_status": "pending"
+    }
+  ]
 }
