@@ -1,5 +1,24 @@
 {
-  "created_at": "2026-11-26T16:06:59.433383+00:00",
-  "count": 0,
-  "drafts": []
+  "created_at": "2026-11-27T01:25:45.774479+00:00",
+  "count": 2,
+  "drafts": [
+    {
+      "source": "BBC Bangla",
+      "title": "ট্রাম্পের নতুন শুল্ক ভারত-মার্কিন বাণিজ্য চুক্তিতে কী প্রভাব ফেলবে?",
+      "link": "https://www.bbc.com/bengali/articles/c5x2wxye4pw3o?at_medium=RSS&at_campaign=rss",
+      "description": "ভারত-সহ বেশ কয়েকটা দেশের উপর প্রস্তাবিত বাণিজ্য শুল্কের হার ঘোষণা করেছে যুক্তরাষ্ট্র, যাকে ঘিরে বেড়েছে দুই দেশের মধ্যে বাণিজ্য সংঘাত তীব্র হওয়ার আশঙ্কা।",
+      "published": "Thu, 26 Nov 2026 14:00:28 GMT",
+      "ai_summary": "**Drafting the Summary (in",
+      "approval_status": "pending"
+    },
+    {
+      "source": "BBC Bangla",
+      "title": "মোঙ্গল সাম্রাজ্যের প্রথম যে সম্রাট ইসলাম ধর্ম গ্রহণ করেছিলেন",
+      "link": "https://www.bbc.com/bengali/articles/cqp8g3728lxdo?at_medium=RSS&at_campaign=rss",
+      "description": "ইসলাম ধর্ম গ্রহণ করলেও গাজান খান অন্য ধর্মের অনুসারীদের প্রতি সহনশীল ছিলেন। তিনি  একবার জানতে পারেন কিছু বৌদ্ধ ভিক্ষু তাদের মন্দির ধ্বংসের পর কেবল প্রাণ বাঁচাতে ইসলাম ধর্ম গ্রহণ করেছে, তখন তিনি তাদের তিব্বত, কাশ্মীর এবং ভারতে ফিরে যাওয়ার ব্যবস্থা করেন।",
+      "published": "Thu, 26 Nov 2026 08:56:28 GMT",
+      "ai_summary": "মঙ্গোল সাম্রাজ্যের ইসলাম ধর্ম গ্রহণকারী সম্রাট গাজ",
+      "approval_status": "pending"
+    }
+  ]
 }
